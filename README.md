@@ -2,10 +2,6 @@
 
 This Slack Bot integrates Google Gemini's AI technology into Slack, offering a smart, responsive assistant that enhances productivity. Follow these steps to set up and deploy your bot.
 
-### New Features
-* **Multi-turn Conversations:** The bot now supports threaded replies. You can ask follow-up questions within a thread (e.g., "Add 10 more"), and the bot will remember previous interactions to maintain context.
-* **Cloud Run Support:** Includes helper scripts and a Dockerfile to easily build and deploy the bot to Google Cloud Run.
-
 ## Accessing the SlackBot from Slack Channel with an App Mention
 
 ![Accessing the SlackBot from Slack Channel with an App Mention
@@ -14,6 +10,16 @@ This Slack Bot integrates Google Gemini's AI technology into Slack, offering a s
 ## Accessing the SlackBot Using Direct Message
 
 ![Accessing the SlackBot Using Direct Message](https://i0.wp.com/www.marketcalls.in/wp-content/uploads/2024/02/image-37.png?resize=1024%2C439&ssl=1)
+
+
+## New Features in v1.1.0
+### Multi-turn Conversations:
+The bot now supports threaded replies. You can ask follow-up questions within a thread (e.g., "Add 10 more"), and the bot will remember previous interactions to maintain context.
+<img width="1280" height="595" alt="image" src="https://github.com/user-attachments/assets/abdab5e4-8752-403e-88c1-70b83b3f6061" />
+
+
+### Cloud Run Support:
+Includes helper scripts and a Dockerfile to easily build and deploy the bot to Google Cloud Run.
 
 
 ## Resources
