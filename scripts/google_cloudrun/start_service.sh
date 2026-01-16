@@ -1,4 +1,4 @@
-# #!/bin/bash
+#!/bin/bash
 # -----------------------------------------------------------------------------
 # Configuration
 # TODO: Please edit the following variables to match your GCP setup.
