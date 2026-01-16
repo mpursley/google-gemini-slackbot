@@ -1,6 +1,3 @@
-#!/bin/bash
-#set -eo pipefail
-#
 # -----------------------------------------------------------------------------
 # Configuration
 # TODO: Please edit the following variables to match your GCP setup.
@@ -13,7 +10,7 @@
 
 # Source the .env file to load environment variables
 set -a
-source .env
+source ../../.env
 set +a
 
 # The name you want to give your Cloud Run service
@@ -49,10 +46,10 @@ echo "Starting deployment to Cloud Run..."
 gcloud run deploy "$SERVICE_NAME" \
     --project="$PROJECT_ID" \
     --region="$REGION" \
-    --source="." \
+    --source="../.." \
     --platform="managed" \
     --allow-unauthenticated \
-    --env-vars-file=".env"
+    --env-vars-file="../../.env"
 
 echo "-------------------------------------------"
 echo "Deployment successful!"
