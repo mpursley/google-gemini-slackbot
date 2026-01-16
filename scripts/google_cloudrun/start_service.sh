@@ -1,12 +1,13 @@
+# #!/bin/bash
 # -----------------------------------------------------------------------------
 # Configuration
 # TODO: Please edit the following variables to match your GCP setup.
 # -----------------------------------------------------------------------------
 # Check for .env file
-#if [ ! -f .env ]; then
-#    echo "Error: .env file not found. Please ensure it exists in the root directory."
-#    exit 1
-#fi
+if [ ! -f .env ]; then
+    echo "Error: .env file not found. Please ensure it exists in the root directory."
+    exit 1
+fi
 
 # Source the .env file to load environment variables
 set -a
@@ -23,11 +24,10 @@ REGION="us-central1"
 # --- Script starts here ---
 
 # Check if gcloud CLI is installed
-#if [ ! command -v gcloud &> /dev/null ] ; then
-#if [ ! command -v gcloud ] ; then
-#    echo "gcloud CLI not found. Please install it first."
-#    exit 1
-#fi
+if [ ! command -v gcloud &> /dev/null ] ; then
+    echo "gcloud CLI not found. Please install it first."
+    exit 1
+fi
 
 echo "Authenticating with Google Cloud..."
 gcloud auth login
