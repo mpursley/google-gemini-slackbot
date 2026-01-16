@@ -134,3 +134,7 @@ Run the following script to build the container and deploy it to your Google Clo
 ```bash
 ./scripts/google_cloudrun/start_service.sh
 ```
+
+
+## License
+This project is licensed under the MIT License

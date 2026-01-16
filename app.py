@@ -5,29 +5,61 @@ import threading
 import pathlib
 import textwrap
 import os
+import time
 from dotenv import load_dotenv
 
 import google.generativeai as genai
-from threading import Thread
+from threading import Thread, Lock
 
-processed_ids = set()
-
-# Load environment variables from .env file
+# --- Configuration & Globals ---
 load_dotenv()
+
+# Thread-safe duplicate handling
+processed_ids_lock = Lock()
+processed_ids = {}  # Format: {client_msg_id: timestamp}
+DEDUPE_RETENTION_SECONDS = 600  # Keep IDs for 10 minutes
 
 # Define Google API Key and Set Gemini Pro Model
 google_api_key = os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=google_api_key)
+# Note: Ensure the model version is correct (e.g., 'gemini-1.5-flash' or 'gemini-pro')
 model = genai.GenerativeModel('gemini-2.5-flash')
 
-# Initialize a Web Client with the Slack bot token from the environment variables
+# Initialize a Web Client with the Slack bot token
 slack_token = os.getenv('SLACK_BOT_TOKEN')
 client = WebClient(token=slack_token)
 
-# Get BOT_USER_ID from environment variables
+# Get BOT_USER_ID
 BOT_USER_ID = os.getenv('BOT_USER_ID')
+
+# Internal API Key for protecting the /gemini route
+INTERNAL_API_KEY = os.getenv('INTERNAL_API_KEY')
+
 app = Flask(__name__)
 
+def cleanup_processed_ids():
+    """Remove IDs older than DEDUPE_RETENTION_SECONDS."""
+    current_time = time.time()
+    with processed_ids_lock:
+        # Create a list of keys to remove to avoid runtime error during iteration
+        to_remove = [msg_id for msg_id, ts in processed_ids.items()
+                     if current_time - ts > DEDUPE_RETENTION_SECONDS]
+        for msg_id in to_remove:
+            del processed_ids[msg_id]
+
+def is_duplicate(client_msg_id):
+    """Check if message ID is processed, in a thread-safe way."""
+    if not client_msg_id:
+        return False
+
+    # Lazy cleanup on check (simplest approach for this scale)
+    cleanup_processed_ids()
+
+    with processed_ids_lock:
+        if client_msg_id in processed_ids:
+            return True
+        processed_ids[client_msg_id] = time.time()
+        return False
 
 def handle_event_async(data):
     thread = Thread(target=handle_event, args=(data,), daemon=True)
@@ -37,16 +69,14 @@ def handle_event(data):
     event = data["event"]
 
     # --- Consolidated Bot Filtering ---
-    # Ignore messages from any bot, including itself, to prevent loops.
+    # Ignore messages from any bot, including itself
     if "bot_id" in event or event.get("user") == BOT_USER_ID:
         return
 
     # --- Prevent Duplicate Processing from Slack Retries ---
     client_msg_id = event.get("client_msg_id")
-    if client_msg_id and client_msg_id in processed_ids:
+    if is_duplicate(client_msg_id):
         return
-    if client_msg_id:
-        processed_ids.add(client_msg_id)
 
     channel_id = event["channel"]
     user_message = event.get("text", "")
@@ -102,6 +132,12 @@ def handle_event(data):
 
 @app.route('/gemini', methods=['GET'])
 def helloworld():
+    # --- Security Check ---
+    request_key = request.headers.get('X-API-KEY')
+    if not INTERNAL_API_KEY or request_key != INTERNAL_API_KEY:
+        # 401 Unauthorized if key is missing or wrong
+        return jsonify({"error": "Unauthorized"}), 401
+
     if request.method == 'GET':
         gemini = model.generate_content("Hi")
         return gemini.text
