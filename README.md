@@ -1,7 +1,10 @@
-
 # Slack Bot with Google Gemini
 
 This Slack Bot integrates Google Gemini's AI technology into Slack, offering a smart, responsive assistant that enhances productivity. Follow these steps to set up and deploy your bot.
+
+### New Features
+* **Multi-turn Conversations:** The bot now supports threaded replies. You can ask follow-up questions within a thread (e.g., "Add 10 more"), and the bot will remember previous interactions to maintain context.
+* **Cloud Run Support:** Includes helper scripts and a Dockerfile to easily build and deploy the bot to Google Cloud Run.
 
 ## Accessing the SlackBot from Slack Channel with an App Mention
 
@@ -22,6 +25,8 @@ For a detailed step-by-step guide on building this digital assistant, visit [Bui
 - Google Gemini API Key
 - Slack App with OAuth & Permissions configured
 - Python environment with necessary libraries
+- Google Cloud CLI: Required if using the included deployment scripts for Cloud Run.
+- Docker: Required if deploying via container or running locally with Docker.
 
 ## Configuration
 
@@ -32,12 +37,14 @@ The `.env.sample` file contains the following structure:<br>
 GOOGLE_API_KEY=your_google_api_key_here<br>
 SLACK_BOT_TOKEN=your_slack_bot_token_here<br>
 BOT_USER_ID=your_bot_user_id_here<br>
-FLASK_APP=your_entry_point_script_here # e.g., "app.py"<br></code>
+FLASK_APP=your_entry_point_script_here # e.g., "app.py"<br>
+PROJECT_ID=your_google_cloud_project_id # Required for Cloud Run deployment<br></code>
+
 
 ### Steps to configure your environment:
 
 1. Copy the `.env.sample` file to a new file named `.env` in the root directory of the project.
-2. Replace `your_google_api_key_here`, `your_slack_bot_token_here`, `your_bot_user_id_here`, and `your_entry_point_script_here` with your actual configuration values.
+2. Replace `your_google_api_key_here`, `your_slack_bot_token_here`, `your_bot_user_id_here`, `your_entry_point_script_here`, and `your_google_cloud_project_id` with your actual configuration values.
 
 **Note:** Never commit your `.env` file or any sensitive credentials to version control. The `.env` file is included in the `.gitignore` to prevent accidental upload.
 
@@ -53,7 +60,7 @@ FLASK_APP=your_entry_point_script_here # e.g., "app.py"<br></code>
    - Create a Python virtual environment and activate it.
    - Install necessary Python libraries including Flask, Slack SDK, and Google Gemini libraries.
 6. **Implement Your Slack Bot**: Use Flask for handling Slack events and Google Gemini for generating responses.
-7. **Deploy Your Application**: Choose between local testing with ngrok or deploying to Google Cloud App Engine for production.
+7. **Deploy Your Application**: Choose between local testing with ngrok, deploying to Google Cloud App Engine, or Google Cloud Run.
 8. **Configure Slack Event Subscriptions**: Update your Slack app's event subscriptions with your deployment's request URL.
 9. **Access Your Slack Bot**: Test your bot via direct message or by mentioning it in a channel.
 
@@ -80,14 +87,11 @@ Run the following command to install the dependencies listed in `requirements.tx
 
 ## Deployment
 
-Detailed steps for deploying with ngrok for local testing and Google Cloud App Engine for production, including setting environment variables and configuring app.yaml for GCP. (refer the resource section)
+### Deployment to Google Cloud Run
 
-## Contributing
+This project now includes scripts to automate the deployment process to Google Cloud Run using Docker.
 
-Invite contributions by providing guidelines for submitting pull requests to your project.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-
+**1. Deploy Service**
+Run the following script to build the container and deploy it to your Google Cloud project:
+```bash
+./start_service_in_google_cloudrun.sh
