@@ -94,4 +94,4 @@ This project now includes scripts to automate the deployment process to Google C
 **1. Deploy Service**
 Run the following script to build the container and deploy it to your Google Cloud project:
 ```bash
-./start_service_in_google_cloudrun.sh
+./scripts/google_cloudrun/start_service_in_google_cloudrun.sh
