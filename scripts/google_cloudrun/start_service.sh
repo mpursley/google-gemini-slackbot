@@ -4,8 +4,8 @@
 # TODO: Please edit the following variables to match your GCP setup.
 # -----------------------------------------------------------------------------
 # Check for .env file
-if [ ! -f .env ]; then
-    echo "Error: .env file not found. Please ensure it exists in the root directory."
+if [ ! -f ../../.env ]; then
+    echo "Error: ../../.env file not found. Please ensure it exists in the root directory."
     exit 1
 fi
 
