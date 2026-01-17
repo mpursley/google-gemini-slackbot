@@ -1,7 +1,6 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
 # Configuration
-
 # Source the .env file to load environment variables
 set -a
 source .env
@@ -13,6 +12,7 @@ SERVICE_NAME="gemini-slackbot"
 # The Google Cloud region to deploy your service in (e.g., us-central1)
 REGION="us-central1"
 
+# -----------------------------------------------------------------------------
 # --- Script starts here ---
 # Check if gcloud CLI is installed
 if [ ! command -v gcloud &> /dev/null ] ; then
