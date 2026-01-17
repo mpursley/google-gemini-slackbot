@@ -20,15 +20,7 @@ SERVICE_NAME="gemini-slackbot"
 # The Google Cloud region to deploy your service in (e.g., us-central1)
 REGION="us-central1"
 
-
 # --- Script starts here ---
-
-# Check if gcloud CLI is installed
-if [ ! command -v gcloud &> /dev/null ] ; then
-    echo "gcloud CLI not found. Please install it first."
-    exit 1
-fi
-
 echo "Authenticating with Google Cloud..."
 gcloud auth login
 gcloud config set project "$PROJECT_ID"
