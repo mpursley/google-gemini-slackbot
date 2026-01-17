@@ -1,17 +1,10 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
 # Configuration
-# TODO: Please edit the following variables to match your GCP setup.
-# -----------------------------------------------------------------------------
-# Check for .env file
-if [ ! -f ../../.env ]; then
-    echo "Error: ../../.env file not found. Please ensure it exists in the root directory."
-    exit 1
-fi
 
 # Source the .env file to load environment variables
 set -a
-source ../../.env
+source .env
 set +a
 
 # The name you want to give your Cloud Run service
@@ -20,9 +13,7 @@ SERVICE_NAME="gemini-slackbot"
 # The Google Cloud region to deploy your service in (e.g., us-central1)
 REGION="us-central1"
 
-
 # --- Script starts here ---
-
 # Check if gcloud CLI is installed
 if [ ! command -v gcloud &> /dev/null ] ; then
     echo "gcloud CLI not found. Please install it first."
